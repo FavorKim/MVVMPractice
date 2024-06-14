@@ -11,7 +11,7 @@ public class Player
     }
 
     public int UserId { get; private set; }
-    public string Name { get; private set; }
+    public string Name { get; set; }
     public int Level { get; set; }
 }
 
@@ -22,6 +22,7 @@ public class GameLogicManager
 
     private static Dictionary<int, Player> _playerDic = new Dictionary<int, Player>();
     private Action<int, int> _levelUpCallback;
+    private Action<int, string> m_nameChangeCallBack;
 
     public static GameLogicManager Inst
     {
@@ -53,6 +54,16 @@ public class GameLogicManager
         _levelUpCallback -= levelupCallback;
     }
 
+    public void RegisterChangeNameCallback(Action<int, string> changeNameCallback)
+    {
+        m_nameChangeCallBack += changeNameCallback;
+    }
+
+    public void UnRegisterChangeNameCallback(Action <int, string> changeNameCallback)
+    {
+        m_nameChangeCallBack -= changeNameCallback;
+    }
+
     public void RequestLevelUp()
     {
         int reqUserId = _curSelectedPlayerId;
@@ -65,6 +76,31 @@ public class GameLogicManager
         }
     }
 
+    public void RequestLevelUpDouble()
+    {
+        int reqUserId = _curSelectedPlayerId;
+
+        if (_playerDic.ContainsKey(reqUserId))
+        {
+            var curPlayer = _playerDic[reqUserId];
+            curPlayer.Level += 2;
+            _levelUpCallback.Invoke(reqUserId, curPlayer.Level);
+        }
+    }
+
+    public void RequestChangeName(string name)
+    {
+        int reqUserId = _curSelectedPlayerId;
+        if (_playerDic.ContainsKey(reqUserId))
+        {
+            var curPlayer = _playerDic[reqUserId];
+            curPlayer.Name = name;
+            m_nameChangeCallBack.Invoke(reqUserId, curPlayer.Name);
+        }
+    }
+
+
+
     public void RefreshCharacterInfo(int requestId, Action<int, string, int> callback)
     {
         _curSelectedPlayerId = requestId;
@@ -74,4 +110,6 @@ public class GameLogicManager
             callback.Invoke(curPlayer.UserId, curPlayer.Name, curPlayer.Level);
         }
     }
+
+    
 }
