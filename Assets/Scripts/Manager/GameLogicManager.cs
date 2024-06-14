@@ -46,6 +46,7 @@ public class GameLogicManager
 
     public void RegisterLevelUpCallback(Action<int, int> levelupCallback)
     {
+        // 게임매니저가 뷰모델의 함수를 구독 
         _levelUpCallback += levelupCallback;
     }
 

@@ -2,10 +2,13 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 using TempProfile.Extension;
+using ViewModel.Extensions;
+
 
 public class TempProfileUIView : MonoBehaviour
 {
     [SerializeField] Text Text_Name;
+    [SerializeField] Text Text_Level;
     private TempProfileUIViewModel vm;
 
     private void OnEnable()
@@ -33,8 +36,11 @@ public class TempProfileUIView : MonoBehaviour
     {
         switch(e.PropertyName)
         {
-            case nameof(vm.PlayerName):
-                Text_Name.text = vm.PlayerName;
+            case nameof(vm.Name):
+                Text_Name.text = $"이름 : {vm.Name}";
+                break;
+            case nameof(vm.Level):
+                Text_Level.text = $"레벨 : {vm.Level}";
                 break;
         }
     }

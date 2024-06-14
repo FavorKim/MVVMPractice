@@ -20,6 +20,7 @@ public class TopLeftUIView : MonoBehaviour
             m_viewModel.PropertyChanged += OnPropertyChanged;
             m_viewModel.RegisterEventOnEnable();
             m_viewModel.RefreshViewModel();
+            
         }
     }
 
